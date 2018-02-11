@@ -8,7 +8,8 @@
 ## Criar o model Authors
 - php artisan make:model Author -crmf
 - Colocar as colunas na tabela authors em database/migrations/create_authors_table.php
-    ```public function up()
+    ```php
+    public function up()
     {
         Schema::create('authors', function (Blueprint $table) {
             $table->increments('id');
@@ -22,27 +23,28 @@
 ## Adicionar o ID do autor ao Post
 - php artisan make:migration add_author_id_to_posts --table=posts
 - Colocar a coluna de chave estrangeira em database/migrations/add_author_id_to_posts.php
-    ```public function up()
+    ```php
+    public function up()
     {
-            Schema::table('posts', function (Blueprint $table) {
-                $table->integer('author_id')->unsigned();
+        Schema::table('posts', function (Blueprint $table) {
+            $table->integer('author_id')->unsigned();
 
-                $table->foreign('author_id')->references('id')->on('authors');
-            });
-        }
+            $table->foreign('author_id')->references('id')->on('authors');
+        });
+    }
 
-        /**
-         * Reverse the migrations.
-         *
-         * @return void
-         */
-        public function down()
-        {
-            Schema::table('posts', function (Blueprint $table) {
-                $table->dropColumn('author_id');
-            });
-        }
-    }```
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropColumn('author_id');
+        });
+    }
+    ```
 
 ## Rodar as migrations
 - Antes de rodar as migrations, temos que dar refresh no banco de dados, pois podem existir dados que impediriam a adição de novas chaves estrangeiras (PDOException::("SQLSTATE[23000]):
@@ -50,10 +52,37 @@
 - php artisan migrate
 
 ## Adicionar os relacionamentos
-    - app/Post.php
-        - Code here
-    - app/Author.php
-        - Code here
+- app\Post.php
+    
+    ```php
+    class Post extends Model
+    {
+        public function comments()
+        {
+            return $this->hasMany('App\Comment');
+        }
+
+        public function author()
+        {
+            return $this->belongsTo('App\Author');
+        }
+    }
+    ```
+- app/Author.php
+
+    ```php
+    class Author extends Model
+    {
+        public function posts()
+        {
+            return $this->hasMany('App\Post');
+        }
+        public function comments()
+        {
+            return $this->hasManyThrough('App\Comment', 'App\Post');
+        }
+    }
+    ```
 
 ## Testar o banco de dados no Tinker
 - php artisan tinker
