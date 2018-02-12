@@ -1,4 +1,6 @@
 # Laravel Básico - Parte 2 (hasManyThrough)
+- [Parte 1 - Setup do projeto, hasMany relationship e Laravel Tinker](https://github.com/leandroramos/laravel_basico/tree/part1)
+- [Parte 3 - Usando Factories](https://github.com/leandroramos/laravel_basico/tree/part3)
 
 ## Criar o model Authors
 - php artisan make:model Author -m
