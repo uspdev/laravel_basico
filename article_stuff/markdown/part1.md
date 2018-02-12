@@ -19,43 +19,50 @@
 
 ### Criação dos campos nas tabelas
 - database/migrations/create_posts_table.php
-  ```public function up()
+  ```php
+  public function up()
   { 
-  ¦ ¦ Schema::create('posts', function (Blueprint $table) {
-  ¦ ¦ ¦ ¦ $table->increments('id');
-  ¦ ¦ ¦ ¦ $table->string('title');
-  ¦ ¦ ¦ ¦ $table->text('content');
-  ¦ ¦ ¦ ¦ $table->timestamps();
-  ¦ ¦ }); 
-  }```
+      Schema::create('posts', function (Blueprint $table) {
+          $table->increments('id');
+          $table->string('title');
+          $table->text('content');
+          $table->timestamps();
+      }); 
+  }
+  ```
 
 - database/migrations/create_comments_table.php
-  ```public function up()
+  ```php
+  public function up()
   { 
-  ¦ ¦ Schema::create('comments', function (Blueprint $table) {
-  ¦ ¦ ¦ ¦ $table->increments('id');
-  ¦ ¦ ¦ ¦ $table->string('author_email');
-  ¦ ¦ ¦ ¦ $table->text('content');
-  ¦ ¦ ¦ ¦ $text->integer('post_id')->unsigned();
-  ¦ ¦ ¦ ¦ $table->timestamps();
+      Schema::create('comments', function (Blueprint $table) {
+          $table->increments('id');
+          $table->string('author_email');
+          $table->text('content');
+          $text->integer('post_id')->unsigned();
+          $table->timestamps();
 
-  ¦ ¦ ¦ ¦ $table->foreign('post_id')->references('id')->on('posts');
-  ¦ ¦ }); 
-  }```
+          $table->foreign('post_id')->references('id')->on('posts');
+      }); 
+  }
+  ```
 
 ### Rodar as migrations
 - php artisan migrate
 
 ### Colocar o relacionamento 1:N nos models
 - app/Post.php
-    ```public function post()
+    ```php
+    public function post()
     {
         return $this->belongsTo('App\Post');
-    }```
+    }
+    
 - app/Comment.php
-    ```public function comments()
+    ```php
+    public function comments()
     {
         return $this->hasMany('App\Comment');
-    }```
+    }
 
     

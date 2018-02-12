@@ -22,12 +22,12 @@
     ```php
     public function up()
     {
-            Schema::table('posts', function (Blueprint $table) {
-                $table->integer('author_id')->unsigned();
+        Schema::table('posts', function (Blueprint $table) {
+            $table->integer('author_id')->unsigned();
 
-                $table->foreign('author_id')->references('id')->on('authors');
-            });
-        }
+            $table->foreign('author_id')->references('id')->on('authors');
+        });
+    }
 
         /**
          * Reverse the migrations.
