@@ -1,8 +1,4 @@
-# Passos para a elaboração do artigo
-
-## Modelagem do banco de dados
-- Modelar no MySQL Workbench
-- Colocar o model.mwb e um .png no repositório
+# Laravel Básico - Parte 1
 
 ## Criação do banco de dados
 - Criar o banco de dados no SGBD preferido
@@ -14,8 +10,8 @@
 - Editar o arquivo .env com nossos dados de conexão ao banco de dados
 
 ## Criação dos models e migrations
-- php artisan make:model Post -crmf
-- php artisan make:model Comment -crmf
+- php artisan make:model Post -m
+- php artisan make:model Comment -m
 
 ### Criação dos campos nas tabelas
 - database/migrations/create_posts_table.php
@@ -57,6 +53,7 @@
     {
         return $this->belongsTo('App\Post');
     }
+    ```
     
 - app/Comment.php
     ```php
@@ -64,5 +61,8 @@
     {
         return $this->hasMany('App\Comment');
     }
+    ```
 
-    
+## Links de referência
+- [Laravel 5.6 - Configuration](https://laravel.com/docs/5.6/configuration)
+- [Laravel 5.6 - Eloquent Relationships](https://laravel.com/docs/5.6/eloquent-relationships#one-to-many)
