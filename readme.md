@@ -1,4 +1,6 @@
 # Parte 3 - Factories
+- [Parte 1 - Setup do projeto, hasMany relationship e Laravel Tinker](https://github.com/leandroramos/laravel_basico/tree/part1)
+- [Parte 2 - Adicionando colunas às tabelas e hasManyThrough relationship](https://github.com/leandroramos/laravel_basico/tree/part2)
 
 ## Criar as factories
     - php artisan make:factory AuthorFactory --model="App\\Author"
