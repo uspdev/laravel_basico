@@ -49,7 +49,8 @@
     - php artisan migrate
 
 ## Adicionar os relacionamentos
-    - app/Post.php
+- app/Post.php
+
         ```php
         <?php
 
