@@ -1,4 +1,4 @@
-# Passos para a parte 3 do artigo
+# Parte 3 - Factories
 
 ## Criar as factories
     - php artisan make:factory AuthorFactory --model="App\\Author"
@@ -62,3 +62,35 @@
             ];
         });
         ```
+
+## Código do DatabaseSeeder
+    ```php
+    <?php
+
+    use Illuminate\Database\Seeder;
+
+    class DatabaseSeeder extends Seeder
+    {
+        /**
+         * Run the database seeds.
+         *
+         * @return void
+         */
+        public function run()
+        {
+            // $this->call(UsersTableSeeder::class);
+            echo "Criando 10 autores...\n";
+            factory(App\Author::class, 10)->create();
+
+            echo "Criando 36 posts relacionados a autores aleatórios...\n";
+            factory(App\Post::class, 36)->create();
+
+            echo "Criando 67 comentários relacionados a posts aleatórios...\n";
+            factory(App\Comment::class, 67)->create();
+        }
+    }
+    ```
+
+## Links de referência
+- [Laravel 5.6 - Database Testing](https://laravel.com/docs/5.6/database-testing)
+- [Faker - Documentação (e repositório)](https://github.com/fzaninotto/Faker)
