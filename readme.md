@@ -41,11 +41,14 @@
         Title:      $post->title
         Content:    $post->content
         Author:     $author
+    ```
+```php
 TEXT;
         // A marca do fim do heredoc (TEXT;) deve ficar na coluna zero da linha.
         // ou teremos um erro - Unexpected end of file
-
-        return "<pre>$text</pre>";
+```
+    ```php
+    return "<pre>$text</pre>";
     }
     ```
 
