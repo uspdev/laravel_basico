@@ -10,8 +10,14 @@ class Author extends Model
     {
         return $this->hasMany('App\Post');
     }
+
     public function comments()
     {
         return $this->hasManyThrough('App\Comment', 'App\Post');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
 }
