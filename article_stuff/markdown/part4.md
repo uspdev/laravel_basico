@@ -1,4 +1,4 @@
-# Parte 4 - Controllers
+# Parte 4 - AuthorController
 
 ## Criar o controller para os autores
 - php artisan make:controller AuthorController --resource

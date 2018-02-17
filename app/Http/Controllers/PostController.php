@@ -14,7 +14,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = json_encode(Post::all(), JSON_PRETTY_PRINT);
+        return "<pre>$posts</pre>";
     }
 
     /**
@@ -24,7 +25,12 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        /**
+         * Nossa página (view) create terá
+         * o formulário para cadastrar um
+         * post
+         */
+        return "Na próxima parte teremos o formulário de cadastro do post aqui.";
     }
 
     /**
@@ -35,7 +41,11 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        /**
+         * É para cá que os dados do formulário
+         * virão quando clicarmos no botão
+         * para cadastrar um autor
+         */
     }
 
     /**
@@ -46,7 +56,15 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        $author = $post->author->name;
+
+        $text = <<<TEXT
+        ID:         $post->id
+        Title:      $post->title
+        Content:    $post->content
+        Author:     $author
+TEXT;
+        return "<pre>$text</pre>";
     }
 
     /**
@@ -57,7 +75,13 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        /**
+         * Nossa página (view) edit terá
+         * o formulário para editar o
+         * post
+         */
+
+        return "Ainda não podemos editar o post <br><strong>$post->title</strong><br> porque não temos o formulário.";
     }
 
     /**
@@ -69,7 +93,11 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        /**
+         * É para cá que os dados do formulário
+         * virão quando clicarmos no botão
+         * para editar o post
+         */
     }
 
     /**
@@ -80,6 +108,11 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        /**
+         * Ainda não vamos apagar o
+         * autor do banco de dados
+         * mas logo teremos a view
+         * para isso
+         */
     }
 }
