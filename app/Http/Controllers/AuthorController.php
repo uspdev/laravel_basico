@@ -69,19 +69,16 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
-        //$a = json_encode($author, JSON_PRETTY_PRINT);
-        $a = Author::where('authors.id', $author->id)
-            ->join('posts', 'posts.author_id', '=', 'authors.id')
-            ->groupBy('authors.id')
-            ->get([
-                'authors.id', 
-                'authors.name',
-                'authors.email',
-                DB::raw('count(posts.id) as posts')
-            ]);
+        $posts = $author->posts->count();
 
-        $a = json_encode($a, JSON_PRETTY_PRINT);
-        return "<pre>$a</pre>";
+        $text = <<<TEXT
+        ID:     $author->id
+        Name:   $author->name
+        E-mail: $author->email
+        Bio:    $author->bio
+        Posts:  $posts
+TEXT;
+        return "<pre>$text</pre>";
     }
 
     /**
@@ -98,8 +95,7 @@ class AuthorController extends Controller
          * autor
          */
 
-        $author = Author::with('posts'->count())->findOrFail($author);
-        return "Ainda não podemos editar o autor $author->name porque não temos o formulário.";
+        return "Ainda não podemos editar o autor <strong>$author->name</strong> porque não temos o formulário.";
     }
 
     /**
