@@ -14,8 +14,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = json_encode(Post::all(), JSON_PRETTY_PRINT);
-        return "<pre>$posts</pre>";
+        $posts = Post::all();
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -56,15 +56,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $author = $post->author->name;
-
-        $text = <<<TEXT
-        ID:         $post->id
-        Title:      $post->title
-        Content:    $post->content
-        Author:     $author
-TEXT;
-        return "<pre>$text</pre>";
+        return view('posts.show', compact('post'));
     }
 
     /**
