@@ -40,7 +40,7 @@
     - No navegador:
         - http://localhost:8000/authors/{id} ({id} = número do ID do author)
     - Método show($author)
-    ```php
+```php
     public function show(Author $author)
     {
         $posts = $author->posts->count();
@@ -57,7 +57,7 @@ TEXT;
 
         return "<pre>$text</pre>";
     }
-    ```
+```
 
 ## Criar, editar e deletar autores
 Esses métodos serão implementados nas próximas partes, quando tivermos nossas páginas com os formulários.
