@@ -31,7 +31,7 @@
     - No navegador:
         - http://localhost:8000/posts/{id} ({id} = número do ID do post)
     - Método show($post)
-    ```php
+```php
     public function show(Post $post)
     {
         $author = $post->author->name;
@@ -41,8 +41,6 @@
         Title:      $post->title
         Content:    $post->content
         Author:     $author
-    ```
-```php
 TEXT;
         // A marca do fim do heredoc (TEXT;) deve ficar na coluna zero da linha.
         // ou teremos um erro - Unexpected end of file
