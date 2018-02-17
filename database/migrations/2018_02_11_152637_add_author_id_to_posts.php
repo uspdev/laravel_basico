@@ -29,6 +29,7 @@ class AddAuthorIdToPosts extends Migration
     {
         Schema::table('posts', function (Blueprint $table) {
             $table->dropForeign('posts_author_id_foreign');
+            $table->dropColumn('author_id');
         });
     }
 }
