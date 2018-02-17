@@ -46,11 +46,9 @@
 TEXT;
         // A marca do fim do heredoc (TEXT;) deve ficar na coluna zero da linha.
         // ou teremos um erro - Unexpected end of file
-```
-    ```php
-    return "<pre>$text</pre>";
+        return "<pre>$text</pre>";
     }
-    ```
+```
 
 ## Criar, editar e deletar posts
 Esses métodos serão implementados nas próximas partes, quando tivermos nossas páginas com os formulários.
