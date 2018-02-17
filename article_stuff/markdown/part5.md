@@ -73,3 +73,38 @@ public function user()
 ### Criar a autenticação
 - php artisan make:auth
 
+### Adicionar o campo "bio" ao form de registro
+- Adicionar ao formulário (antes do campo password) resources/views/auth/register.blade.php:
+```php
+<div class="form-group row">
+    <label for="bio" class="col-md-4 col-form-label text-md-right">Bio</label>
+    <div class="col-md-6">
+        <textarea id="bio" class="form-control" name="bio" value="{{ old('bio')  }}"></textarea>
+    </div>
+</div>
+```
+
+### Ajustar o controller 
+- app/Http/Controllers/Auth/RegisterController.php
+```php
+// Coloque abaixo do namespace
+use App\User;
+
+// ... aqui tem um monte de código
+// troque o código do método create por isso:
+protected function create(array $data)
+{
+    $user = User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => bcrypt($data['password']),
+    ]);
+
+    $author = new Author;
+    $author->bio = $data['bio'];
+
+    $user->author()->save($author);
+
+    return $user;
+}
+```

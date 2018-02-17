@@ -19,3 +19,7 @@ Route::resources([
     'authors' => 'AuthorController',
     'posts' => 'PostController'
 ]);
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
