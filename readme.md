@@ -77,6 +77,6 @@
 ```
 
 ## Links para saber mais
-[Laravel 5.6 - Views](https://laravel.com/docs/5.6/views)
-[Laravel 5.6 - Template](https://laravel.com/docs/5.6/blade)
+- [Laravel 5.6 - Views](https://laravel.com/docs/5.6/views)
+- [Laravel 5.6 - Template](https://laravel.com/docs/5.6/blade)
 
