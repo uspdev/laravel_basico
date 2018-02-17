@@ -1,110 +1,74 @@
 # Parte 5 - PostController
 
-## Fazer login dos autores
-### Alterar o model Author para relacionar com User
-- Tabelas users e authors
-    - Imagem das tabelas
-- Tabelas users e authors com relacionamento 1:1
-    - Imagem das tabelas
-#### Alterar a tabela authors
-- Criar migration para adicionar user_id foreign e remover as colunas name e email
-    - php artisan make:migration add_user_id_remove_name_email_from_authors --table=authors
-    - Código para a migration database/migrations/add_user_id_remove_name_email_from_authors.php
+## Criar o controller para os posts
+- php artisan make:controller PostController --resource
+    - Cria o controller app/Http/Controllers/PostController.php com os métodos (actions)
+
+## Criar a rota para o nosso resource Post
+- routes/web.php
     ```php
-    public function up()
-    {
-        Schema::table('authors', function (Blueprint $table) {
-            $table->dropColumn('name');
-            $table->dropColumn('email');
-            $table->integer('user_id')->unsigned();
+    Route::resources([
+        'authors' => 'AuthorController',
+        'posts' => 'PostController'
+    ]);
+    ```
 
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
+## Mostrando todos os posts
+- app/Http/Controllers/PostController.php
+    - No navegador:
+        - http://localhost:8000/posts
+    - Método index
+    ```php
+    public function index()
     {
-        Schema::table('authors', function (Blueprint $table) {
-            $table->string('name');
-            $table->string('email');
-            $table->dropForeign('authors_user_id_foreign');
-            $table->dropColumn('user_id');
-        });
+        $posts = json_encode(Post::all(), JSON_PRETTY_PRINT);
+        return "<pre>$posts</pre>";
     }
     ```
 
-#### Ajustar os models User e Author
-- Setar o relacionamento: adicionar em app\User.php
+## Mostrando apenas um post
+- app/Http/Controllers/PostController.php
+    - No navegador:
+        - http://localhost:8000/posts/{id} ({id} = número do ID do post)
+    - Método show($post)
 ```php
-public function author()
-{
-    return $this->hasOne('App\Author');
-}
-```
-- Setar o relacionamento: adicionar em app\Author.php
-```php
-public function user()
-{
-    return $this->belongsTo('App\User');
-}
-```
+    public function show(Post $post)
+    {
+        $author = $post->author->name;
 
-#### Inserir user e author no Banco de Dados
-- No tinker
-```php
->>> $user = new User
->>> $user->name = "Leandro Ramos"
->>> $user->email = "leandroembu@gmail.com"
->>> $user->password = Hash::make('123456');
->>> $user->save()
->>> $author = new Author
->>> $author->bio = "My bio here."
->>> $user->author()->save($author)
+        $text = <<<TEXT
+        ID:         $post->id
+        Title:      $post->title
+        Content:    $post->content
+        Author:     $author
+TEXT;
+        // A marca do fim do heredoc (TEXT;) deve ficar na coluna zero da linha.
+        // ou teremos um erro - Unexpected end of file
+        return "<pre>$text</pre>";
+    }
 ```
 
-### Criar a autenticação
-- php artisan make:auth
+## Criar, editar e deletar posts
+Esses métodos serão implementados nas próximas partes, quando tivermos nossas páginas com os formulários.
+- Acessando a action edit de um post
+    - app/Http/Controllers/PostController.php
+        - No navegador:
+            - https://localhost:8000/posts/{id}/edit ({id} = número do ID do post)
+        - Método edit
+        ```php
+        public function edit(Post $post)
+        {
+            /**
+             * Nossa página (view) edit terá
+             * o formulário para editar o
+             * post
+             */
 
-### Adicionar o campo "bio" ao form de registro
-- Adicionar ao formulário (antes do campo password) resources/views/auth/register.blade.php:
-```php
-<div class="form-group row">
-    <label for="bio" class="col-md-4 col-form-label text-md-right">Bio</label>
-    <div class="col-md-6">
-        <textarea id="bio" class="form-control" name="bio" value="{{ old('bio')  }}"></textarea>
-    </div>
-</div>
-```
+            return "Ainda não podemos editar o post <br><strong>$post->title</strong><br> porque não temos o formulário.";
+        }
+        ```
 
-### Ajustar o controller 
-- app/Http/Controllers/Auth/RegisterController.php
-```php
-// Coloque abaixo do namespace
-use App\User;
+## Links para saber mais (vá fundo)
+- [Laravel 5.6 - Resource Controllers](https://laravel.com/docs/5.6/controllers#resource-controllers)
+- [PHP - Strings - Referência para o uso de heredoc](https://secure.php.net/manual/pt_BR/language.types.string.php)
 
-// ... aqui tem um monte de código
-// troque o código do método create por isso:
-protected function create(array $data)
-{
-    $user = User::create([
-        'name' => $data['name'],
-        'email' => $data['email'],
-        'password' => bcrypt($data['password']),
-    ]);
-
-    $author = new Author;
-    $author->bio = $data['bio'];
-
-    $user->author()->save($author);
-
-    return $user;
-}
-```
