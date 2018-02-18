@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +18,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $posts = Post::orderBy('created_at', 'desc')->get();
         return view('posts.index', compact('posts'));
     }
 
@@ -25,12 +29,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        /**
-         * Nossa página (view) create terá
-         * o formulário para cadastrar um
-         * post
-         */
-        return "Na próxima parte teremos o formulário de cadastro do post aqui.";
+        return view('posts.create');
     }
 
     /**
@@ -41,11 +40,15 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        /**
-         * É para cá que os dados do formulário
-         * virão quando clicarmos no botão
-         * para cadastrar um autor
-         */
+        $post = new Post;
+
+        $post->title        = $request->title;
+        $post->content      = $request->content;
+        $post->author_id    = decrypt($request->author_id);
+
+        $post->save();
+        $request->session()->flash('alert-success', 'Post criado com sucesso!');
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -67,13 +70,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        /**
-         * Nossa página (view) edit terá
-         * o formulário para editar o
-         * post
-         */
+        $action = action('PostController@update', $post->id);
 
-        return "Ainda não podemos editar o post <br><strong>$post->title</strong><br> porque não temos o formulário.";
+        return view('posts.edit', compact('post', "action"));
     }
 
     /**
@@ -85,11 +84,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        /**
-         * É para cá que os dados do formulário
-         * virão quando clicarmos no botão
-         * para editar o post
-         */
+        dd("Atualizando o post $post->id");
     }
 
     /**
