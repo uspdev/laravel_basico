@@ -15,4 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('authors', 'AuthorController');
+Route::resources([
+    'authors' => 'AuthorController',
+    'posts' => 'PostController'
+]);

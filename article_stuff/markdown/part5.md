@@ -29,17 +29,10 @@
 ## Mostrando apenas um post
 - app/Http/Controllers/PostController.php
     - No navegador:
-<<<<<<< HEAD
-        - http://localhost:8000/authors/{id} ({id} = número do ID do author)
-    - Método show($author)
-```php
-    public function show(Author $author)
-=======
         - http://localhost:8000/posts/{id} ({id} = número do ID do post)
     - Método show($post)
-```php
+    ```php
     public function show(Post $post)
->>>>>>> db5a33541a82779cacc16f43f8367f1eb888dd55
     {
         $author = $post->author->name;
 
@@ -51,9 +44,10 @@
 TEXT;
         // A marca do fim do heredoc (TEXT;) deve ficar na coluna zero da linha.
         // ou teremos um erro - Unexpected end of file
+
         return "<pre>$text</pre>";
     }
-```
+    ```
 
 ## Criar, editar e deletar posts
 Esses métodos serão implementados nas próximas partes, quando tivermos nossas páginas com os formulários.
