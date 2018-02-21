@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Author;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,20 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        //
+        //$authors = json_encode(Author::all(), JSON_PRETTY_PRINT);
+        $authors = Author::join('posts', 'posts.author_id', '=', 'authors.id')
+            ->groupBy('authors.id')
+            ->get([
+                'authors.id',
+                'authors.name',
+                'authors.email',
+                DB::raw('count(posts.id) as posts')
+            ]
+        );
+
+        $authors = json_encode($authors, JSON_PRETTY_PRINT);
+
+        return "<pre>$authors</pre>";
     }
 
     /**
@@ -24,7 +38,12 @@ class AuthorController extends Controller
      */
     public function create()
     {
-        //
+        /**
+         * Nossa página (view) create terá
+         * o formulário para cadastrar um
+         * autor
+         */
+        return "Na próxima parte teremos o formulário de cadastro do autor aqui.";
     }
 
     /**
@@ -35,7 +54,11 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        /**
+         * É para cá que os dados do formulário
+         * virão quando clicarmos no botão
+         * para cadastrar um autor
+         */
     }
 
     /**
@@ -46,7 +69,16 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
-        //
+        $posts = $author->posts->count();
+
+        $text = <<<TEXT
+        ID:     $author->id
+        Name:   $author->name
+        E-mail: $author->email
+        Bio:    $author->bio
+        Posts:  $posts
+TEXT;
+        return "<pre>$text</pre>";
     }
 
     /**
@@ -57,7 +89,13 @@ class AuthorController extends Controller
      */
     public function edit(Author $author)
     {
-        //
+        /**
+         * Nossa página (view) edit terá
+         * o formulário para editar o
+         * autor
+         */
+
+        return "Ainda não podemos editar o autor <strong>$author->name</strong> porque não temos o formulário.";
     }
 
     /**
@@ -69,7 +107,11 @@ class AuthorController extends Controller
      */
     public function update(Request $request, Author $author)
     {
-        //
+        /**
+         * É para cá que os dados do formulário
+         * virão quando clicarmos no botão
+         * para editar o autor
+         */
     }
 
     /**
@@ -80,6 +122,11 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        //
+        /**
+         * Ainda não vamos apagar o
+         * autor do banco de dados
+         * mas logo teremos a view
+         * para isso
+         */
     }
 }
