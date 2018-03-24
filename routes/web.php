@@ -11,14 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::resources([
     'authors' => 'AuthorController',
     'posts' => 'PostController'
 ]);
+Route::get('authors/{author}/posts', 'AuthorController@posts');
 
 Auth::routes();
 

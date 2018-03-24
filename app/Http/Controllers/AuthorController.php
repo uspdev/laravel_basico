@@ -9,6 +9,18 @@ use Illuminate\Http\Request;
 class AuthorController extends Controller
 {
     /**
+     * List all posts from the logged author
+     *
+     * @param \App\Author  $author
+     * @return \Illuminate\Http\Response
+     */
+    public function posts(Author $author)
+    {
+        $posts = $author->posts;
+        return view('authors.posts', compact('posts'));
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

@@ -1,24 +1,3 @@
-# Parte 9 - Views - Listando posts do autor logado
-
-## Criar a rota para a view dos posts do autor
-- routes/web.php
-```php
-Route::get('authors/{author}/posts', 'AuthorController@posts');
-```
-
-## Criar o método que lista os posts do autor
-- Adicionar método em app/Http/Controllers/AuthorController.php
-```php
-public function posts(Author $author)
-{
-    $posts = $author->posts;
-    return view('authors.posts', compact('posts'));
-}
-```
-
-## Criar a view que lista os posts do autor
-- Criar arquivo resources/views/authors/posts.blade.php
-```php
 @extends('layouts.app')
 @section('content')
     <div class="row justify-content-center">
