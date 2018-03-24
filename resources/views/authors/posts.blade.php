@@ -19,8 +19,12 @@
                     <div class="card-body">
                         <p>
                             {{ $post->content }} <br>
-                            <a class="btn btn-danger" href="{{ action('PostController@destroy', $post->id) }}" title="Apagar o post">Apagar</a><br>
                             <a class="btn btn-primary" href="{{ action('PostController@edit', $post->id) }}" title="Editar o post">Editar</a><br>
+                            <form method="post" action="{{ action('PostController@destroy', $post->id) }}">
+                                {{ csrf_field() }}
+                                {{ method_field('delete') }}
+                                <button type="submit" class="btn btn-danger delete-button" onclick="return confirm('Tem certeza?');")>Apagar</button>
+                            </form>
                         </p>
                     </div>
                 </div>

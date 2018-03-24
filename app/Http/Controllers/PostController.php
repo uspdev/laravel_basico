@@ -93,13 +93,10 @@ class PostController extends Controller
      * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy(Request $request, Post $post)
     {
-        /**
-         * Ainda não vamos apagar o
-         * autor do banco de dados
-         * mas logo teremos a view
-         * para isso
-         */
+        $post->delete();
+        $request->session()->flash('alert-success', 'Post apagado com sucesso!');
+        return redirect()->back();
     }
 }

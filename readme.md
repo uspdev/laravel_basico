@@ -1,23 +1,18 @@
-# Parte 9 - Views - Listando posts do autor logado
+# Parte 10 - Autor apagando seus próprios posts
 
-## Criar a rota para a view dos posts do autor
-- routes/web.php
+## Implementar método destroy no PostController
+- app/Http/Controllers/PostController.php
 ```php
-Route::get('authors/{author}/posts', 'AuthorController@posts');
-```
-
-## Criar o método que lista os posts do autor
-- Adicionar método em app/Http/Controllers/AuthorController.php
-```php
-public function posts(Author $author)
+public function destroy(Request $request, Post $post)
 {
-    $posts = $author->posts;
-    return view('authors.posts', compact('posts'));
+    $post->delete();
+    $request->session()->flash('alert-success', 'Post apagado com sucesso!');
+    return redirect()->back();
 }
 ```
 
-## Criar a view que lista os posts do autor
-- Criar arquivo resources/views/authors/posts.blade.php
+## Alterar a view dos posts do autor
+- resources/views/authors/posts
 ```php
 @extends('layouts.app')
 @section('content')
@@ -40,8 +35,12 @@ public function posts(Author $author)
                     <div class="card-body">
                         <p>
                             {{ $post->content }} <br>
-                            <a class="btn btn-danger" href="{{ action('PostController@destroy', $post->id) }}" title="Apagar o post">Apagar</a><br>
                             <a class="btn btn-primary" href="{{ action('PostController@edit', $post->id) }}" title="Editar o post">Editar</a><br>
+                            <form method="post" action="{{ action('PostController@destroy', $post->id) }}">
+                                {{ csrf_field() }}
+                                {{ method_field('delete') }}
+                                <button type="submit" class="btn btn-danger delete-button" onclick="return confirm('Tem certeza?');")>Apagar</button>
+                            </form>
                         </p>
                     </div>
                 </div>
@@ -50,3 +49,42 @@ public function posts(Author $author)
         </div>
     </div>
 @endsection
+```
+
+## Ajustar a migration para que possamos apagar o post e seus comentários
+- database/migrations/*****create_posts.php
+```php
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreatePostsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('posts', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title');
+            $table->text('content');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('posts');
+    }
+}
+```
