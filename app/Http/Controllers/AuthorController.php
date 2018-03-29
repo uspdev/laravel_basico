@@ -9,6 +9,19 @@ use Illuminate\Http\Request;
 class AuthorController extends Controller
 {
     /**
+     * Redirect logged author to posts
+     *
+     * @param \App\Author  $author
+     * @return \Illuminate\Http\Response
+     */
+    public function login()
+    {
+        $author = \Auth::user()->author;
+        $posts = $author->posts;
+        return view('authors.posts', compact('posts'));
+    }
+
+    /**
      * List all posts from the logged author
      *
      * @param \App\Author  $author

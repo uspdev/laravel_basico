@@ -84,7 +84,12 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        dd("Atualizando o post $post->id");
+        $post->title        = $request->title;
+        $post->content      = $request->content;
+
+        $post->save();
+        $request->session()->flash('alert-success', 'Post alterado com sucesso!');
+        return redirect("authors/$post->author_id/posts");
     }
 
     /**
