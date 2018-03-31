@@ -32,6 +32,14 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <li>
+                            <a class="nav-link" href="/">Todos os posts</a>
+                        </li>
+                        @auth
+                            <li>
+                                <a class="nav-link"href="/home">Meus posts</a>
+                            </li>
+                        @endauth
                         <!-- Authentication Links -->
                         @guest
                             <li><a class="nav-link" href="{{ route('login') }}">Login</a></li>
