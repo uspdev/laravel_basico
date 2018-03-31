@@ -19,6 +19,7 @@
                     <div class="card-body">
                         <p>
                             {{ $post->content }} <br>
+                            <a href="{{ action('PostController@show', $post->id) }}" title="Ver post e comentários">Ver post e comentários</a><br>
                             <a class="btn btn-primary" href="{{ action('PostController@edit', $post->id) }}" title="Editar o post">Editar</a><br>
                             <form method="post" action="{{ action('PostController@destroy', $post->id) }}">
                                 {{ csrf_field() }}

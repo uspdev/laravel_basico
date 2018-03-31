@@ -78,8 +78,10 @@ class CommentController extends Controller
      * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Comment $comment)
+    public function destroy(Request $request, Comment $comment)
     {
-        //
+        $comment->delete();
+        $request->session()->flash('alert-success', 'Comentário apagado com sucesso!');
+        return redirect()->back();
     }
 }
