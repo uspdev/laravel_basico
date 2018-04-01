@@ -19,4 +19,5 @@ Route::get('authors/{author}/posts', 'AuthorController@posts');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'AuthorController@login');
+Route::get('/', 'PostController@index');
