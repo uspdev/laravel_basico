@@ -59,6 +59,7 @@ Route::delete('comments/{comment}', 'CommentController@destroy');
 ```
 
 ## Alterar a view show do post para mostrar o botão de deletar somente para o autor do post
+- resources/views/posts/show.blade.php
 ```php
 @extends('layouts.app')
 @section('content')
