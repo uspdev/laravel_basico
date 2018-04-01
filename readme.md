@@ -1,104 +1,84 @@
-# Parte 12 - Autor deletando comentários em seus posts
+# Parte 13 - Menu da aplicação
 
-## Implementar método destroy no CommentController
-- app/Http/Controllers/CommentController.php
+## Colocar os links no menu da aplicação
+- Código completo de resources/views/layouts/app.blade.php
 ```php
-public function destroy(Request $request, Comment $comment)
-{
-    $comment->delete();
-    $request->session()->flash('alert-success', 'Comentário apagado com sucesso!');
-    return redirect()->back();
-}
-```
+<!DOCTYPE html>
+<html lang="{{ app()->getLocale() }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-## Adicionar a rota para o método destroy do CommentController
-- routes/web.php
-```php
-Route::delete('comments/{comment}', 'CommentController@destroy');
-```
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-## Adicionar link para mostrar o post e seus comentários na view de posts do autor
-- resources/views/authors/posts.blade.php
-```php
-@extends('layouts.app')
-@section('content')
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <h2>Meus Posts</h2>
-            <div class="flash-message">
-                @foreach (['danger', 'warning', 'success', 'info'] as $msg)
-                    @if(Session::has('alert-' . $msg))
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-                    <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="fechar">&times;</a></p>
-                    @endif
-                @endforeach
-            </div>
-            @foreach ($posts as $post)
-                <div class="card card-default">
-                    <div class="card-header">
-                        <h3>{{ $post->title }} :: <small>por {{ $post->author->user->name }}</small></h3>
-                    </div>
-                    <div class="card-body">
-                        <p>
-                            {{ $post->content }} <br>
-                            <a href="{{ action('PostController@show', $post->id) }}" title="Ver post e comentários">Ver post e comentários</a><br>
-                            <a class="btn btn-primary" href="{{ action('PostController@edit', $post->id) }}" title="Editar o post">Editar</a><br>
-                            <form method="post" action="{{ action('PostController@destroy', $post->id) }}">
-                                {{ csrf_field() }}
-                                {{ method_field('delete') }}
-                                <button type="submit" class="btn btn-danger delete-button" onclick="return confirm('Tem certeza?');")>Apagar</button>
-                            </form>
-                        </p>
-                    </div>
-                </div>
-                <br>
-            @endforeach
-        </div>
-    </div>
-@endsection
-```
+    <!-- Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-## Alterar a view show do post para mostrar o botão de deletar somente para o autor do post
-```php
-@extends('layouts.app')
-@section('content')
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card card-default">
-                <div class="card-header">
-                    <h3>{{ $post->title }} :: <small>por {{ $post->author->user->name }}</small></h3>
-                </div>
-                <div class="card-body">
-                    <p>
-                        {{ $post->content }}
-                    </p>
-                    <h4>Comentários:</h4>
-                    <!-- Comentários do post -->
-                    @foreach($post->comments as $comment)
-                        <div class="card card-default">
-                            <div class="card-header">
-                                {{ $comment->author_email }}
-                            </div>
-                            <div class="card-body">
-                                {{ $comment->content }}
-                                @if (Auth::check() && Auth::user()->author->id == $post->author_id)
-                                    <form method="post" action="{{ action('CommentController@destroy', $comment->id) }}">
-                                        {{ csrf_field() }}
-                                        {{ method_field('delete') }}
-                                        <button type="submit" class="btn btn-danger delete-button" onclick="return confirm('Tem certeza?');")>Apagar Comentário</button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav mr-auto">
+
+                    </ul>
+
+                    <!-- Right Side Of Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <li>
+                            <a class="nav-link" href="/">Todos os posts</a>
+                        </li>
+                        @auth
+                            <li>
+                                <a class="nav-link"href="/home">Meus posts</a>
+                            </li>
+                        @endauth
+                        <!-- Authentication Links -->
+                        @guest
+                            <li><a class="nav-link" href="{{ route('login') }}">Login</a></li>
+                            <li><a class="nav-link" href="{{ route('register') }}">Register</a></li>
+                        @else
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        Logout
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
                                     </form>
-                                @endif
-                            </div>
-                        </div>
-                        <br>
-                    @endforeach
+                                </div>
+                            </li>
+                        @endguest
+                    </ul>
                 </div>
             </div>
-        </div>
-    </div>
-@endsection
-```
+        </nav>
 
-## Links para saber mais
-[Laravel 5.6 - Blade] (https://laravel.com/docs/5.6/blade)
-[Laravel 5.6 - Authentication] (https://laravel.com/docs/5.6/authentication)
+        <main class="py-4">
+            @yield('content')
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
+</body>
+</html>
+```
