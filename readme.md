@@ -52,6 +52,7 @@ public function destroy(Request $request, Post $post)
 ```
 
 ## Ajustar a migration para que possamos apagar o post e seus comentários
+Temos que incluir o "onDelete('cascade')", para que os comentários sejam apagados junto com o post.
 - database/migrations/*****create_comments.php
 ```php
 <?php
