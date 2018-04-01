@@ -30,7 +30,9 @@ public function login()
     return view('authors.posts', compact('posts'));
 }
 ```
+
 - Alterar a rota /home para o autor logado
+
 ```php
 Route::get('/home', 'AuthorController@login');
 ```
@@ -38,5 +40,3 @@ Route::get('/home', 'AuthorController@login');
 ```php
 Route::get('/', 'PostController@index');
 ```
-
-
