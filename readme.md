@@ -1,70 +1,18 @@
-# Parte 9 - Views - Listando posts do autor logado
+# Parte 10 - Autor apagando seus próprios posts
 
-## Alterar os seeders do banco de dados
-- database/seeds/DatabaseSeeder.php
+## Implementar método destroy no PostController
+- app/Http/Controllers/PostController.php
 ```php
-<?php
-
-use Illuminate\Database\Seeder;
-
-class DatabaseSeeder extends Seeder
+public function destroy(Request $request, Post $post)
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        echo "Creating 10 users...\n";
-        factory(App\User::class, 10)->create();
-        echo "Creating 10 authors...\n";
-        factory(App\Author::class, 10)->create();
-        echo "Creating 36 posts related to random authors...\n";
-        factory(App\Post::class, 36)->create();
-        echo "Creating 67 comments related to random posts...\n";
-        factory(App\Comment::class, 67)->create();
-    }
-}
-```
-- database/factories/AuthorFactory.php
-```php
-<?php
-
-use Faker\Generator as Faker;
-
-$factory->define(App\Author::class, function (Faker $faker) {
-    return [
-        'bio'   => $faker->paragraph(1),
-        'user_id' => $faker->unique()->numberBetween(1, 10)
-    ];
-});
-```
-
-## "Zerar"o banco de dados e popular com o novo seeder
-```php
-php artisan migrate:fresh
-php artisan db:seed
-```
-
-## Criar a rota para a view dos posts do autor
-- routes/web.php
-```php
-Route::get('authors/{author}/posts', 'AuthorController@posts');
-```
-
-## Criar o método que lista os posts do autor
-- Adicionar método em app/Http/Controllers/AuthorController.php
-```php
-public function posts(Author $author)
-{
-    $posts = $author->posts;
-    return view('authors.posts', compact('posts'));
+    $post->delete();
+    $request->session()->flash('alert-success', 'Post apagado com sucesso!');
+    return redirect()->back();
 }
 ```
 
-## Criar a view que lista os posts do autor
-- Criar arquivo resources/views/authors/posts.blade.php
+## Alterar a view dos posts do autor
+- resources/views/authors/posts
 ```php
 @extends('layouts.app')
 @section('content')
@@ -87,8 +35,12 @@ public function posts(Author $author)
                     <div class="card-body">
                         <p>
                             {{ $post->content }} <br>
-                            <a class="btn btn-danger" href="{{ action('PostController@destroy', $post->id) }}" title="Apagar o post">Apagar</a><br>
                             <a class="btn btn-primary" href="{{ action('PostController@edit', $post->id) }}" title="Editar o post">Editar</a><br>
+                            <form method="post" action="{{ action('PostController@destroy', $post->id) }}">
+                                {{ csrf_field() }}
+                                {{ method_field('delete') }}
+                                <button type="submit" class="btn btn-danger delete-button" onclick="return confirm('Tem certeza?');")>Apagar</button>
+                            </form>
                         </p>
                     </div>
                 </div>
@@ -97,3 +49,46 @@ public function posts(Author $author)
         </div>
     </div>
 @endsection
+```
+
+## Ajustar a migration para que possamos apagar o post e seus comentários
+Temos que incluir o "onDelete('cascade')", para que os comentários sejam apagados junto com o post.
+- database/migrations/*****create_comments.php
+```php
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateCommentsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('comments', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('author_email');
+            $table->text('content');
+            $table->integer('post_id')->unsigned();
+            $table->timestamps();
+
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('comments');
+    }
+}
+```
