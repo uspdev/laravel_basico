@@ -35,12 +35,14 @@ public function destroy(Request $request, Post $post)
                     <div class="card-body">
                         <p>
                             {{ $post->content }} <br>
+                            @if (Auth::check() && Auth::user()->author->id == $post->author_id)
                             <a class="btn btn-primary" href="{{ action('PostController@edit', $post->id) }}" title="Editar o post">Editar</a><br>
                             <form method="post" action="{{ action('PostController@destroy', $post->id) }}">
                                 {{ csrf_field() }}
                                 {{ method_field('delete') }}
                                 <button type="submit" class="btn btn-danger delete-button" onclick="return confirm('Tem certeza?');")>Apagar</button>
                             </form>
+                            @endif
                         </p>
                     </div>
                 </div>
