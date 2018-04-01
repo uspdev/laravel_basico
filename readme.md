@@ -52,7 +52,7 @@ public function destroy(Request $request, Post $post)
 ```
 
 ## Ajustar a migration para que possamos apagar o post e seus comentários
-- database/migrations/*****create_posts.php
+- database/migrations/*****create_comments.php
 ```php
 <?php
 
@@ -60,7 +60,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePostsTable extends Migration
+class CreateCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -69,11 +69,14 @@ class CreatePostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
+            $table->string('author_email');
             $table->text('content');
+            $table->integer('post_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 
@@ -84,7 +87,7 @@ class CreatePostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('comments');
     }
 }
 ```
