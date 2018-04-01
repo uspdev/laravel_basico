@@ -19,6 +19,13 @@
                             </div>
                             <div class="card-body">
                                 {{ $comment->content }}
+                                @if (Auth::check() && Auth::user()->author->id == $post->author_id)
+                                    <form method="post" action="{{ action('CommentController@destroy', $comment->id) }}">
+                                        {{ csrf_field() }}
+                                        {{ method_field('delete') }}
+                                        <button type="submit" class="btn btn-danger delete-button" onclick="return confirm('Tem certeza?');")>Apagar Comentário</button>
+                                    </form>
+                                @endif
                             </div>
                         </div>
                         <br>

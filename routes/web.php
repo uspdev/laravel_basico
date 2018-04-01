@@ -15,6 +15,7 @@ Route::resources([
     'authors' => 'AuthorController',
     'posts' => 'PostController'
 ]);
+Route::delete('comments/{comment}', 'CommentController@destroy');
 Route::get('authors/{author}/posts', 'AuthorController@posts');
 
 Auth::routes();
