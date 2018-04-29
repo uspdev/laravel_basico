@@ -1,106 +1,33 @@
-# Parte 3 - Factories
-- [Parte 1 - Setup do projeto, hasMany relationship e Laravel Tinker](https://github.com/leandroramos/laravel_basico/tree/part1)
-- [Parte 2 - Adicionando colunas às tabelas e hasManyThrough relationship](https://github.com/leandroramos/laravel_basico/tree/part2)
+## Laravel 5.6 Básico
 
-## Criar as factories
-    - php artisan make:factory AuthorFactory --model="App\\Author"
-    - php artisan make:factory PostFactory --model="App\\Post"
-    - php artisan make:factory CommentFactory --model="App\\Comment"
+Série de screencasts composta por treze vídeos que demonstram várias características do framework Laravel.
 
-## Código das factories
-- AuthorFactory
+[Playlist no YouTube](https://www.youtube.com/watch?v=lO_udEy9I4U&list=PLIFOx3X8xDut2X2ydevlVvFKkqFxZ4SX9)
 
-    ```php
-    <?php
+[Parte 1 - hasMany Relationships e Tinker](https://github.com/leandroramos/laravel_basico/tree/part1)
 
-    use Faker\Generator as Faker;
+[Parte 2 - hasManyThrough Relationships](https://github.com/leandroramos/laravel_basico/tree/part2)
 
-    $factory->define(App\Author::class, function (Faker $faker) {
-        return [
-            'name'  => $faker->name,
-            'email' => $faker->unique()->safeEmail,
-            'bio'   => $faker->paragraph(1),
-        ];
-    });
-    ```
-        
-- PostFactory
+[Parte 3 - Factories](https://github.com/leandroramos/laravel_basico/tree/part3)
 
-    ```php
-    <?php
+[Parte 4 - Controllers e Rotas](https://github.com/leandroramos/laravel_basico/tree/part4)
 
-    use App\Author;
-    use Faker\Generator as Faker;
+[Parte 5 - PostController](https://github.com/leandroramos/laravel_basico/tree/part5)
 
-    $factory->define(App\Post::class, function (Faker $faker) {
-        return [
-            'title'     => $faker->sentence(4),
-            'content'   => $faker->paragraph(4),
+[Parte 6 - Login](https://github.com/leandroramos/laravel_basico/tree/part6)
 
-            'author_id' => function () {
-                return Author::orderByRaw("RAND()")
-                    ->take(1)
-                    ->first()
-                    ->id;
-            }
-        ];
-    });
-    ```
-        
-- CommentFactory
+[Parte 7 - Views](https://github.com/leandroramos/laravel_basico/tree/part7)
 
-    ```php
-    <?php
+[Parte 8 - Formulário - Create/Edit](https://github.com/leandroramos/laravel_basico/tree/part8)
 
-    use App\Post;
-    use Faker\Generator as Faker;
+[Parte 9 - Listando posts do autor](https://github.com/leandroramos/laravel_basico/tree/part9)
 
-    $factory->define(App\Comment::class, function (Faker $faker) {
-        return [
-            'author_email'  => $faker->unique()->safeEmail,
-            'content'       => $faker->paragraph(2),
+[Parte 10 - Apagando posts do autor](https://github.com/leandroramos/laravel_basico/tree/part10)
 
-            'post_id' => function () {
-                return Post::orderByRaw("RAND()")
-                    ->take(1)
-                    ->first()
-                    ->id;
-            }
-        ];
-    });
-    ```
+[Parte 11 - Editando posts do autor](https://github.com/leandroramos/laravel_basico/tree/part11)
 
-## Código do DatabaseSeeder
-- database/seeds/DatabaseSeeder.php
+[Parte 12 - Deletando comentários](https://github.com/leandroramos/laravel_basico/tree/part12)
 
-    ```php
-    <?php
+[Parte 13 - Menu da aplicação](https://github.com/leandroramos/laravel_basico/tree/part13)
 
-    use Illuminate\Database\Seeder;
-
-    class DatabaseSeeder extends Seeder
-    {
-        /**
-         * Run the database seeds.
-         *
-         * @return void
-         */
-        public function run()
-        {
-            // $this->call(UsersTableSeeder::class);
-            echo "Criando 10 autores...\n";
-            factory(App\Author::class, 10)->create();
-
-            echo "Criando 36 posts relacionados a autores aleatórios...\n";
-            factory(App\Post::class, 36)->create();
-
-            echo "Criando 67 comentários relacionados a posts aleatórios...\n";
-            factory(App\Comment::class, 67)->create();
-        }
-    }
-    ```
-  
-
-## Links de referência
-- [Laravel 5.6 - Database Testing](https://laravel.com/docs/5.6/database-testing)
-- [Faker - Documentação (e repositório)](https://github.com/fzaninotto/Faker)
+**Dica:** Cada parte da série é um branch deste repositório.
